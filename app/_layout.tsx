@@ -49,13 +49,26 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack 
+      screenOptions={{
+          headerShown: true, // Show header globally
+          headerTransparent: true, // Makes the header background transparent
+          headerStyle: {
+            backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent background
+          },
+          headerTintColor: '#fff', // White text/icons
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 20,
+          },
+        }}
       initialRouteName='login'>
-        <Stack.Screen name="login" options={{ headerShown: false }}/>
-        <Stack.Screen name="signup" options={{ headerShown: false }}/>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(customerTabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="login" options={{ headerShown: false,headerTransparent: true, }}/>
+        <Stack.Screen name="signup" options={{ headerShown: false,headerTransparent: true, }}/>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false,headerTransparent: true, }} />
+        <Stack.Screen name="(customerTabs)" options={{ headerShown: false,headerTransparent: true,}} />
         <Stack.Screen name="+not-found" 
         options={{
+          headerTransparent: true,
           headerStyle: {
             backgroundColor: '#f4511e',
           },

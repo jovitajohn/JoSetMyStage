@@ -1,8 +1,8 @@
-import { StyleSheet,View, Image, Text,TextInput,ScrollView,Modal, TouchableOpacity,Dimensions,FlatList,ListRenderItem } from 'react-native';
+import { StyleSheet,View, Button, Image, Text,TextInput,ScrollView,Modal, TouchableOpacity,Dimensions,FlatList,ListRenderItem } from 'react-native';
 import { Stack,useNavigation } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useRef, useCallback } from 'react';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import React from 'react';
 
@@ -10,17 +10,52 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import customerHome from '../(customerTabs)/customerIndex/customerHome';
+import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 
 export default function VendorProfile() {
 
   const [text, onChangeText] = React.useState('');
   const [number, onChangeNumber] = React.useState('');
+  const [userId, setUserId] = React.useState('1234');
 
   const router = useRouter();
       const navigation = useNavigation();
     
       useEffect(() => {
-        navigation.setOptions({ headerShown: true });
+        navigation.setOptions({ 
+          headerShown: true,
+          headerStyle: {
+          shadowColor: 'transparent',  // Remove shadow on iOS
+          elevation: 0,  // Remove shadow on Android
+          //opacity: .4,
+          backgroundColor: 'rgba(255, 255, 255, 0.3)', // Optional: Keep header background transparent
+          height: 100,
+        }, 
+        headerTitleAlign: 'start',
+        headerTitleStyle: {
+          fontSize: 18,
+          fontWeight: 'bold',
+          lineHeight: 100, // Matches header height
+          flex: 1, 
+        },
+        headerTitle: () => (
+          <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Profile</Text>
+            <Icon
+              name="save-outline"
+              size={24}
+              color="#00adf5"
+              style={{ marginRight: 15 }}
+              onPress={() => alert('Profile changes saved')}
+            />
+          </View>
+        ),
+      
+        headerTintColor: '#000000',});
       }, [navigation]);
 
       const [isToggled, setIsToggled] = useState(false); // Toggle state
@@ -30,62 +65,91 @@ export default function VendorProfile() {
     router.replace('../(customerTabs)/customerIndex')
   };
 
+  //bottom sheet
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+  // Function to open the BottomSheet
+const openBottomSheet = () => {
+  bottomSheetRef.current?.expand(); // Open bottom sheet
+};
+
+//Save profile
+const handleSave = () => {
+  // Add your authentication logic here.
+  alert('Profile changes saved')
+};
+
     
   return (
-      <View
+    <GestureHandlerRootView style={styles.container}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}
         style = {styles.container}>
            <SafeAreaProvider>
            <SafeAreaView style = {styles.container}>
-              <Stack.Screen
-                options={{
-                  title: 'Profile',
-                  headerRight: () => (
-                              
-                                 <Icon
-                                   name="save-outline" // Icon name from Ionicons
-                                   size={24}
-                                   color="#00adf5"
-                                   style={{ marginRight: 15 }}
-                                   onPress={() => alert('Profile changes saved')}
-                                 />
-                  
-                              ),
-                }}
-              />
               <ThemedView style={styles.container}>
-                <View style={styles.cardDetail}>
-                 <ScrollView >
-          
-                    <View style={styles.card}>
-
-                          <View style={styles.toggleContainer}>
-                            <TouchableOpacity
-                              style={[
-                                styles.toggleButton,
-                                { backgroundColor: isToggled ? '#4CAF50' : '#f44336' }, // Change color based on state
-                              ]}
-                              onPress={handleToggle}
-                            >
-                              <Text style={styles.toggleText}>
-                                {isToggled ? 'ON' : 'OFF'} {/* Show ON/OFF based on state */}
-                              </Text>
-                            </TouchableOpacity>
-                            <Text style={styles.toggleLabel}
-                            onPress={() => alert('Be a vendor to showcase your properties or skills and earn money on free time')}> Vendor?</Text>
-                          </View>
+                <View >
+               
+                        {/* //https://toppng.com/uploads/preview/roger-berry-avatar-placeholder-11562991561rbrfzlng6h.png */}
                         
-                          <Image source={{ uri: 'https://toppng.com/uploads/preview/roger-berry-avatar-placeholder-11562991561rbrfzlng6h.png' }} style={styles.cardImage} />
-                          <Text style={styles.cardTitle}> User Name </Text>
+                          <Image source={{ uri: 'https://cdn.britannica.com/42/193142-050-F69B1A23/Sundar-Pichai-Google.jpg?w=385' }} style={styles.cardImageFull} />
+                          <View style = {styles.cardDetail}>
+                              <View style={styles.toggleContainer}>
+                                <Text style={styles.cardTitle}> Sundar Pichai </Text>
 
+                                  <TouchableOpacity
+                                    style={[
+                                      styles.toggleButton,
+                                      { backgroundColor: isToggled ? '#4CAF50' : '#f44336' }, // Change color based on state
+                                    ]}
+                                    onPress={handleToggle}
+                                  >
+                                    <Text style={styles.toggleText}>
+                                      {isToggled ? 'ON' : 'OFF'} {/* Show ON/OFF based on state */}
+                                    </Text>
+                                  </TouchableOpacity>
+                                  <Text style={styles.toggleLabel}
+                                  onPress={() => alert('Be a vendor to showcase your properties or skills and earn money on free time')}> Vendor?</Text>
+                              </View>
 
-                          <Text style={styles.label}>About me:</Text>
-                          <TextInput
-                            style={styles.aboutInput}
-                            multiline={true}
-                            textAlignVertical="top"
-                            onChangeText={onChangeText}
-                            placeholder=" Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-                          />
+                              <TextInput
+                                style={styles.aboutInput}
+                                multiline={true}
+                                textAlignVertical="top"
+                                onChangeText={onChangeText}
+                                placeholder=" About me - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+                              />
+                              
+                              <QRCode 
+                                value={userId} // User ID as the QR code content
+                                size={150} 
+                                color="black"
+                                backgroundColor="white"
+                              />
+                              
+
+                          </View>
+                          
+                </View>
+                
+      <BottomSheet style={styles.card}
+        snapPoints={["10%","20%","35%","40%", "50%","60%","70%","80%","90%"]} // Add snap points
+        ref={bottomSheetRef}
+        onChange={handleSheetChanges}
+      >
+        <BottomSheetView >
+          <KeyboardAvoidingView 
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            
+          >
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+
+                <View >
+          
+                    <View >
                           <TextInput
                             style={styles.input}
                             multiline={true}
@@ -134,23 +198,32 @@ export default function VendorProfile() {
                             placeholder="Country"
                           />
 
+                          <TouchableOpacity onPress={handleSave} style={styles.button}>
+                            <Text style={styles.buttonText}>Save</Text>
+                          </TouchableOpacity>
+
                     </View>
 
-                  </ScrollView>
                 </View>
+              </ScrollView>
+            </KeyboardAvoidingView>   
+                </BottomSheetView>
+      </BottomSheet>
+    
               </ThemedView>
             </SafeAreaView>
             </SafeAreaProvider>
 
 
-      </View>
+      </ScrollView>
+      </GestureHandlerRootView>
     );
 }
 
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    padding:1,
+    marginTop: -30,
   },
   headerImage: {
     color: '#808080',
@@ -177,6 +250,11 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "grey",
   },
+  cardImageFull: {
+    width: '100%',
+    height: 300,
+    alignSelf:'center',
+  },
   cardDetail: {
     margin:10,
     alignItems: 'center',
@@ -191,7 +269,8 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 10,
+    flex : 1,
+    alignSelf:'flex-start',
     color: '#333',
   },
   label: {
@@ -209,10 +288,10 @@ const styles = StyleSheet.create({
   aboutInput: {
     minWidth: '90%',
     margin: 12,
-    borderWidth: 1,
+    borderWidth: 0,
     padding: 10,
     minHeight:150,
-    alignItems:'flex-start',
+    alignItems:'stretch',
   },
   round_image: {
     width: 60,
@@ -286,12 +365,12 @@ buttonContainer: {
   marginTop:20,
 },
 button: {
-  flex: 1,
   padding: 10,
-  backgroundColor: '#28A745',
+  backgroundColor: '#1BE7FF',
   borderRadius: 5,
+  justifyContent:'center',
   alignItems: 'center',
-  marginHorizontal: 5,
+  margin: 12,
 },
 buttonSecondary: {
   backgroundColor: 'red',
@@ -352,7 +431,8 @@ toggleContainer:{
   display:'flex',
 flexDirection:'row',
 justifyContent:'flex-end',
-alignItems:'baseline'
+alignItems:'baseline',
+marginTop:10,
 },
 toggleLabel: {
   fontSize: 10,
