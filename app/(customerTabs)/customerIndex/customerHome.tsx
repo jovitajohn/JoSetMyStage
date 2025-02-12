@@ -40,6 +40,7 @@ export default function customerHome() {
                      lineHeight: 100, // Matches header height
                      flex: 1, 
                    },
+                   headerLeft: () => null,
                    headerTitle: () => (
                      <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
                        <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Set My Stage(customer home)</Text>
@@ -118,10 +119,20 @@ export default function customerHome() {
         </ThemedView> */}
              
         <ThemedView style={styles.titleContainer}>
-                      {/* floating search bar option 
+                      floating search bar
                       <View style={styles.floatingTextContainer}>
                         <Text style={styles.floatingText}>Your Floating Text</Text>
-                      </View> */}
+                        <TouchableOpacity onPress={() => Alert.alert('Card Pressed', `You clicked settings`)}
+                         style={styles.floatingIcon}>
+                          <Icon
+                            name="settings-outline" // Icon name from Ionicons
+                            size={24}
+                            color="#00adf5"
+                            onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                          />
+                        </TouchableOpacity>
+                        {/* <Text style={styles.floatingIcon}>Yt</Text> */}
+                      </View>
                       <SafeAreaView style={styles.listContainer}>
                         <FlatList
                            data={listing}
@@ -162,7 +173,7 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: 'column',
     padding: 1,
-    marginTop:30,
+    marginTop:60,
   },
   titleRow: {
     flexDirection: 'row',
@@ -235,20 +246,55 @@ cardDescription: {
   
 },
 floatingTextContainer: {
+  width: '100%',
   position: 'absolute',
-  top: 0, // Adjust as needed to overlap header
+  top: 10, // Adjust as needed to overlap header
   left: 0,
   right: 0,
+  flexDirection:'row',
+  justifyContent: 'space-evenly',
   alignItems: 'center',
   zIndex: 10, // Ensures it stays on top
 },
 
 floatingText: {
-  backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent background
-  color: 'white',
+  width: '70%',
+  //backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent background
+  backgroundColor:'white',
+  color: 'black',
   padding: 10,
   borderRadius: 10,
   fontSize: 16,
   fontWeight: 'bold',
+  //card look
+  shadowColor: 'black',
+  shadowOffset: {
+      width: 0,
+      height: 4,
+  },
+  shadowOpacity: 0.3,
+  shadowRadius: 6,
+  elevation: 14,
+},
+floatingIcon: {
+  width: '12%',
+  //backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent background
+  backgroundColor:'white',
+  color: 'black',
+  padding: 10,
+  borderRadius: 10,
+  fontSize: 16,
+  fontWeight: 'bold',
+  justifyContent: 'center',
+  alignItems: 'center',
+  //card look
+  shadowColor: 'black',
+  shadowOffset: {
+      width: 0,
+      height: 4,
+  },
+  shadowOpacity: 0.3,
+  shadowRadius: 6,
+  elevation: 14,
 },
 });

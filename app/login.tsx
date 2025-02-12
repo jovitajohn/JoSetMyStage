@@ -1,16 +1,24 @@
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Link } from 'expo-router';
+import React from 'react';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const [userName, onChangeText] = React.useState('');
 
   const handleLogin = () => {
     // Add your authentication logic here.
     const isAuthenticated = true; // Replace with actual authentication logic.
 
     if (isAuthenticated) {
-      router.push('./(tabs)'); // Navigate to the tabs screen.
+      if(userName.trim().startsWith('C')){
+      router.push('./(customerTabs)/customerIndex'); // Navigate to the customertabs screen.
+      }else if(userName.trim().startsWith('V')){
+        router.push('./(tabs)'); // Navigate to the tabs screen.
+      }else{
+        alert('Invalid login credentials');
+      }
     } else {
       alert('Invalid login credentials');
     }
@@ -20,7 +28,7 @@ export default function LoginScreen() {
     <View style={styles.container}>
         <View style={styles.loginContainer}>
             <Text style={styles.title}>Login</Text>
-            <TextInput style={styles.input} placeholder="Username" />
+            <TextInput style={styles.input} placeholder="Username" onChangeText={onChangeText} />
             <TextInput style={styles.input} placeholder="Password" secureTextEntry />
             <Button title="Login" onPress={handleLogin} />
         </View>
