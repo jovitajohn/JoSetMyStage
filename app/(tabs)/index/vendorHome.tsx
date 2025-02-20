@@ -1,11 +1,16 @@
-import { View,Text, StyleSheet, SafeAreaView, FlatList,TouchableOpacity,Alert,Image } from 'react-native';
+import { View,Text, StyleSheet, FlatList,ScrollView,TouchableOpacity,Alert,Image } from 'react-native';
 import { Stack,useNavigation } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useRef, useCallback} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Calendar,DateData, CalendarList } from 'react-native-calendars';
+import Icon from 'react-native-vector-icons/Ionicons';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 
 export default function VendorHome() {
@@ -24,8 +29,36 @@ export default function VendorHome() {
 
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: true });
-  }, [navigation]);
+    navigation.setOptions({ headerShown: true,
+                         headerStyle: {
+                         shadowColor: 'transparent',  // Remove shadow on iOS
+                         elevation: 0,  // Remove shadow on Android
+                         //opacity: .4,
+                         backgroundColor: 'white', // Optional: Keep header background transparent
+                         height: 100,
+                       }, 
+                       headerTitleStyle: {
+                         fontSize: 18,
+                         fontWeight: 'bold',
+                         lineHeight: 100, // Matches header height
+                         flex: 1, 
+                       },
+                       headerLeft: () => null,
+                       headerTitle: () => (
+                         <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
+                           <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Set My Stage</Text>
+                           <Icon
+                            name="add-circle-outline" // Icon name from Ionicons
+                            size={24}
+                            color="#00adf5"
+                            style={{ marginRight: 15 }}
+                            onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                          />
+                         </View>
+                       ),
+                     
+                       headerTintColor: '#000000',});
+            }, [navigation]);
 
   const persons = [ {name: ' Name1',id: 1}, 
     {name: ' Name2',id: 2},
@@ -60,77 +93,82 @@ export default function VendorHome() {
         </TouchableOpacity>
       );
 
+  //bottom sheet
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
 
   return (
-    <View 
-style = {styles.container}>
-      <Stack.Screen
-        options={{
-          title: 'Event Host Home',
-        }}
-      />
-      <ThemedView style={styles.titleContainer}>
-        <Calendar
-        onDayPress={(day: DateData) => {
-          setSelected(day.dateString);
-          console.log(day.dateString);
-          
-        }}
-                markedDates={{
-                  [selected]: {
-                    selected: true,
-                    selectedColor: '#00adf5', // Custom background color for the selected date
-                    selectedTextColor: '#ffffff', // Custom text color for the selected date
-                  },
-                    '2024-12-24': { marked: true },
-                    '2024-12-26': {
-                        marked: true, dotColor: 'red',
-                        activeOpacity: 0
+      <View style = {styles.container}>
+        
+        <ThemedView style={styles.titleContainer}>
+          <Calendar
+          onDayPress={(day: DateData) => {
+            setSelected(day.dateString);
+            console.log(day.dateString);
+            
+          }}
+                  markedDates={{
+                    [selected]: {
+                      selected: true,
+                      selectedColor: '#00adf5', // Custom background color for the selected date
+                      selectedTextColor: '#ffffff', // Custom text color for the selected date
                     },
-                }}
-                theme={{
-                    backgroundColor: '#ffffff',
-                    calendarBackground: '#ffffff',
-                    textSectionTitleColor: '#b6c1cd',
-                    selectedDayBackgroundColor: '#00adf5',
-                    selectedDayTextColor: '#ffffff',
-                    todayTextColor: '#00adf5',
-                    dayTextColor: '#2d4150',
-                    textDisabledColor: '#d9e1e8',
-                    dotColor: '#00adf5',
-                    selectedDotColor: '#ffffff',
-                    arrowColor: '#00adf5',
-                    monthTextColor: '#00adf5',
-                    indicatorColor: 'blue',
-                    textDayFontFamily: 'monospace',
-                    textMonthFontFamily: 'monospace',
-                    textDayHeaderFontFamily: 'monospace',
-                    textDayFontSize: 16,
-                    textMonthFontSize: 16,
-                    textDayHeaderFontSize: 16
-                }}
-            />
-            <ThemedText style={styles.line} ></ThemedText>
-            <SafeAreaView style={styles.listContainer}>
-               <FlatList
-                  data={persons}
-                  renderItem={({ item }) => 
-                    <CardItem 
-                    title={item.name}
-                    description={'item.description'}
-                    image={'https://archive.org/download/placeholder-image/placeholder-image.jpg'}
-                    // onPress={() => Alert.alert('Card Pressed', `You pressed ${item.name}`)}
-                    onPress={() => navigation.navigate('booking')}
-                    onButton1Press={() => Alert.alert('Button 1 Pressed', `You pressed Button 1 on ${item.name}`)}
-                    onButton2Press={() => Alert.alert('Button 2 Pressed', `You pressed Button 2 on ${item.name}`)}
-                    />
-              }
+                      '2025-02-10': { marked: true },
+                      '2025-02-26': {
+                          marked: true, dotColor: 'red',
+                          activeOpacity: 0
+                      },
+                  }}
+                  theme={{
+                      backgroundColor: '#ffffff',
+                      calendarBackground: '#ffffff',
+                      textSectionTitleColor: '#b6c1cd',
+                      selectedDayBackgroundColor: '#00adf5',
+                      selectedDayTextColor: '#ffffff',
+                      todayTextColor: '#00adf5',
+                      dayTextColor: '#2d4150',
+                      textDisabledColor: '#d9e1e8',
+                      dotColor: '#00adf5',
+                      selectedDotColor: '#ffffff',
+                      arrowColor: '#00adf5',
+                      monthTextColor: '#00adf5',
+                      indicatorColor: 'blue',
+                      textDayFontFamily: 'monospace',
+                      textMonthFontFamily: 'monospace',
+                      textDayHeaderFontFamily: 'monospace',
+                      textDayFontSize: 16,
+                      textMonthFontSize: 16,
+                      textDayHeaderFontSize: 16
+                  }}
+              />
+              
+                  <View style={styles.line}></View>
+                        <FlatList
+                            contentContainerStyle={{ flexGrow: 1 }} // 🔹 Ensures scrolling works
+                            style={{ flex: 1 }} // 🔹 Takes full height inside BottomSheet
+                            data={persons}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => 
+                              <CardItem 
+                                title={item.name}
+                                description={'item.description'}
+                                image={'https://archive.org/download/placeholder-image/placeholder-image.jpg'}
+                                // onPress={() => Alert.alert('Card Pressed', `You pressed ${item.name}`)}
+                                onPress={() => navigation.navigate('booking')}
+                                onButton1Press={() => Alert.alert('Button 1 Pressed', `You pressed Button 1 on ${item.name}`)}
+                                onButton2Press={() => Alert.alert('Button 2 Pressed', `You pressed Button 2 on ${item.name}`)}
+                              />
+                            }
+                        />
+                      
                 
-                />
-             </SafeAreaView>
-      </ThemedView>
-     
-    </View>
+        </ThemedView>
+      
+      </View>
   );
 }
 
@@ -139,12 +177,13 @@ const styles = StyleSheet.create({
   container:{
     flex: 1,
     padding:5,
+    backgroundColor: 'white',
   },
   titleContainer: {
     flex:1,
     flexDirection: 'column',
     padding: 1,
-    backgroundColor: 'grey',
+    backgroundColor: 'white',
     gap: 8,
   },
   listContainer: {
@@ -152,6 +191,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 1,
     marginTop:20,
+    backgroundColor: 'white',
   },
   stepContainer: {
     gap: 8,
@@ -171,7 +211,7 @@ const styles = StyleSheet.create({
   },
   line : {
      height: 1, 
-     backgroundColor: "grey",
+     backgroundColor: "#00adf5",
      marginHorizontal:10
   },
   card: {
@@ -219,13 +259,13 @@ buttonContainer: {
 button: {
   flex: 1,
   padding: 10,
-  backgroundColor: '#28A745',
+  backgroundColor: '#6DCE5E',
   borderRadius: 5,
   alignItems: 'center',
   marginHorizontal: 5,
 },
 buttonSecondary: {
-  backgroundColor: 'red',
+  backgroundColor: '#E74A4C',
 },
 buttonText: {
   color: '#fff',
