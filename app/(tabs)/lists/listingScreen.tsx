@@ -21,13 +21,42 @@ export default function ListingScreen() {
       // const navigation = useNavigation();
 
         useEffect(() => {
-          navigation.setOptions({ headerShown: true });
-        }, [navigation]);
+          navigation.setOptions({ headerShown: true,
+                                   headerStyle: {
+                                   shadowColor: 'transparent',  // Remove shadow on iOS
+                                   elevation: 0,  // Remove shadow on Android
+                                   //opacity: .4,
+                                   backgroundColor: 'white', // Optional: Keep header background transparent
+                                   height: 100,
+                                 }, 
+                                 headerTitleStyle: {
+                                   fontSize: 18,
+                                   fontWeight: 'bold',
+                                   lineHeight: 100, // Matches header height
+                                   flex: 1, 
+                                 },
+                                 headerLeft: () => null,
+                                 headerTitle: () => (
+                                   <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
+                                     <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Your listing</Text>
+                                     <Icon
+                                      name="add-circle-outline" // Icon name from Ionicons
+                                      size={24}
+                                      color="#00adf5"
+                                      style={{ marginRight: 15 }}
+                                      onPress={() => navigation.navigate('propertyDetail')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                                    />
+                                   </View>
+                                 ),
+                               
+                                 headerTintColor: '#000000',});
+                      },  [navigation]);
 
-        const listing = [ {name: ' Sheraton',id: 1}, 
-          {name: ' Holiday Inn',id: 2},
-          {name: ' IBS',id: 3},
-          {name: ' Apex',id: 4},]
+                      const listing = [ {name: ' Sheraton',id: 1,add:'1 Festival Sq, Edinburgh EH3 9SR ',price:'100/h',img:'https://uniquevenuesofedinburgh.co.uk/wp-content/uploads/2014/05/uve__0000s_0002_dovecot-9-340x340.jpg'}, 
+                        {name: ' Holiday Inn',id: 2,add:'Picardy Pl, Edinburgh EH1 3JT',price:'50/h',img: 'https://www.tagvenue.com/images/location-pages/small/162.jpg'},
+                        {name: ' IBS',id: 3,add:'77 South Bridge, Edinburgh EH1 1HN ',price:'20/h',img:'https://cdn0.hitched.co.uk/vendor/5919/3_2/640/jpg/dsc07353_4_325919-168450847059960.jpeg'},
+                        {name: ' Apex',id: 4,add:'23-27 Waterloo Pl, Edinburgh EH1 3BG ',price:'150/h',img: 'https://cdn0.hitched.co.uk/vendor/0903/3_2/960/jpeg/erin-and-ryan-ceremony_4_190903-166072559082285.jpeg'},]
+              
 
           // Reusable card component
   const CardItem = ({ title, description, image, onPress }: any) => (
@@ -48,7 +77,7 @@ export default function ListingScreen() {
        
       <View
         style = {styles.container}>
-
+{/* 
         <Stack.Screen
           options={{
             title: 'Your listing',
@@ -64,7 +93,7 @@ export default function ListingScreen() {
 
             ),
           }}
-        />
+        /> */}
 
         {/* href sublink method 
         
@@ -79,8 +108,8 @@ export default function ListingScreen() {
                             renderItem={({ item }) =>
                                <CardItem 
                                   title={item.name}
-                                  description={'item.description'}
-                                  image={'https://archive.org/download/placeholder-image/placeholder-image.jpg'}
+                                  description={item.add}
+                                  image={item.img}
                                   onPress={() => Alert.alert('Card Pressed', `You pressed ${item.name}`)}
                                />
                               }  //<Text style={styles.card}>{item.name}</Text>
@@ -109,7 +138,7 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: 'column',
     padding: 1,
-    marginTop:20,
+    marginTop:10,
   },
   stepContainer: {
     gap: 8,
