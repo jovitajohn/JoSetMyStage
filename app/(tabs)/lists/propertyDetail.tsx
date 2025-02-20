@@ -130,10 +130,12 @@ export default function propertyDetail() {
                 }}
               />
               <ThemedView style={styles.container}>
+              <Image source={{ uri: 'https://www.tagvenue.com/images/location-pages/small/162.jpg' }} style={styles.cardImage} />
+              
                 <View style={styles.cardContent}>
                  <ScrollView >
           
-                    <Image source={{ uri: 'https://archive.org/download/placeholder-image/placeholder-image.jpg' }} style={styles.cardImage} />
+                   
                 
                     <TextInput
                       style={styles.input}
@@ -273,12 +275,7 @@ export default function propertyDetail() {
                  
                     </View>  
 
-                    <Text style={styles.cardTitle}>{'Reviews :'}</Text>
-
-                    <Text style={styles.cardDescription}>{'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'}</Text>
-
-                    <Text style={styles.cardDescription}>{'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'}</Text>
-
+                   
                     {/* <TextInput
                       style={styles.input}
                       onChangeText={onChangeNumber}
@@ -314,14 +311,16 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cardImage: {
-    width: 360,
-    height: 200,
-    borderRadius: 30,
+    width: '100%',
+    height: 250,
     alignSelf:'center'
   },
   cardContent: {
     flex: 1,
+    borderRadius:30,
+    marginTop:-50,
     padding:20,
+    backgroundColor:'white',
   },
   cardTitle: {
     fontSize: 16,
