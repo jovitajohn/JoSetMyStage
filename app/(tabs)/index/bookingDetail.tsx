@@ -17,8 +17,35 @@ export default function bookingDetail() {
       const navigation = useNavigation();
     
       useEffect(() => {
-        navigation.setOptions({ headerShown: true });
-      }, [navigation]);
+        navigation.setOptions({ headerShown: true,
+                                 headerStyle: {
+                                 shadowColor: 'transparent',  // Remove shadow on iOS
+                                 elevation: 0,  // Remove shadow on Android
+                                 //opacity: .4,
+                                 backgroundColor: 'white', // Optional: Keep header background transparent
+                                 height: 100,
+                               }, 
+                               headerTitleStyle: {
+                                 fontSize: 18,
+                                 fontWeight: 'bold',
+                                 lineHeight: 100, // Matches header height
+                                 flex: 1, 
+                               },
+                               headerTitle: () => (
+                                 <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
+                                   <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Booking Detail</Text>
+                                   <Icon
+                                    //name="add-circle-outline" // Icon name from Ionicons
+                                    size={24}
+                                    color="#00adf5"
+                                    style={{ marginRight: 15 }}
+                                    onPress={() => console.log("booking detail page")}//navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                                  />
+                                 </View>
+                               ),
+                             
+                               headerTintColor: '#000000',});
+                    },  [navigation]);
     
    
 
@@ -119,11 +146,16 @@ export default function bookingDetail() {
                   title: 'Booking Detail',
                 }}
               />
+              
               <ThemedView style={styles.container}>
+
+                 {/* 'https://archive.org/download/placeholder-image/placeholder-image.jpg' */}
+                 <Image source={{ uri: 'https://www.tagvenue.com/images/location-pages/small/162.jpg' }} style={styles.titleImage} /> 
+
                 <View style={styles.cardDetail}>
                  <ScrollView >
           
-                    <Image source={{ uri: 'https://archive.org/download/placeholder-image/placeholder-image.jpg' }} style={styles.titleImage} />
+                
                     <Text style={styles.cardTitle}> Property Name </Text>
 
                     {/* Customer details card */}
@@ -135,18 +167,19 @@ export default function bookingDetail() {
 
                         </View>
 
-                        <View style={styles.cardDetail}>
+                        <View style={{margin:10}}>
 
-                          <Text style={styles.cardTitle}> Customer Name </Text>
+                          
                           <View style={styles.callMessageButtonContainer}>
+                          <Text style={styles.cardTitle}> Customer Name </Text>
                                 <TouchableOpacity style={styles.callMessageButton} onPress={() => Alert.alert('Button 1 Pressed', `You pressed call `)}>
-                                  <Icon name="call-outline" size={20} color="#fff" style={styles.buttonIcon} />
-                                  <Text style={styles.callMessageButtonText}>Call</Text>
+                                  <Icon name="call-outline" size={20}  style={styles.buttonIcon} />
+                                 
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.callMessageButton} onPress={() => Alert.alert('Button 2 Pressed', `You pressed message `)}>
+                                {/* <TouchableOpacity style={styles.callMessageButton} onPress={() => Alert.alert('Button 2 Pressed', `You pressed message `)}>
                                   <Icon name="chatbubble-outline" size={20} color="#fff" style={styles.buttonIcon} />
                                   <Text style={styles.callMessageButtonText}>Message</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                           </View>
                                       
                         </View>
@@ -207,7 +240,6 @@ export default function bookingDetail() {
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    padding:1,
   },
   headerImage: {
     color: '#808080',
@@ -220,9 +252,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   titleImage: {
-    width: 360,
-    height: 150,
-    borderRadius: 30,
+    width: '100%',
+    height: 250,
     alignSelf:'center'
   },
   cardImage: {
@@ -235,7 +266,10 @@ const styles = StyleSheet.create({
     borderColor: "grey",
   },
   cardDetail: {
-    margin:10,
+    borderRadius:30,
+    marginTop:-50,
+    padding:10,
+    backgroundColor:'white',
   },
   cardContent: {
     flexDirection: 'row',
@@ -394,15 +428,16 @@ buttonText: {
   fontWeight: 'bold',
 },
 callMessageButton:{
-  flex: 1,
-  flexDirection: 'row',
-  padding: 10,
+  flexDirection:'row',
+  paddingTop: 10,
+  paddingBottom:10,
+  paddingLeft:20,
+  width:'40%',
   borderRadius: 5,
-  alignItems: 'center',
-  marginHorizontal: 5,
+  backgroundColor: '#00adf5',
 },
 callMessageButtonContainer:{
-  width: '80%',
+  width: '100%',
   flexDirection: 'row',
   justifyContent: 'space-between',
   marginTop:10,
@@ -413,8 +448,8 @@ callMessageButtonText: {
   fontWeight: 'bold',
 },
 buttonIcon: {
-  marginRight: 4, // Space between icon and text
-  color: '#00adf5',
+  alignSelf:'center',
+  color: '#ffffff',
 },
 imageWrapper: {
   position: 'relative', // To enable absolute positioning for the close icon
