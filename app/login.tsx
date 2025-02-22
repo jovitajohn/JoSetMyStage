@@ -1,27 +1,64 @@
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput,Alert, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Link } from 'expo-router';
-import React from 'react';
+import React,{useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 export default function LoginScreen() {
   const router = useRouter();
-  const [userName, onChangeText] = React.useState('');
+  const [userName, onChangeText] = useState('');
+  const [password,onChangePassword] = useState('');
+  const [loading,setLoading] = useState(false);
 
-  const handleLogin = () => {
-    // Add your authentication logic here.
-    const isAuthenticated = true; // Replace with actual authentication logic.
 
-    if (isAuthenticated) {
-      if(userName.trim().startsWith('C')){
-      router.push('./(customerTabs)/customerIndex'); // Navigate to the customertabs screen.
-      }else if(userName.trim().startsWith('V')){
-        router.push('./(tabs)'); // Navigate to the tabs screen.
-      }else{
-        alert('Invalid login credentials');
-      }
-    } else {
-      alert('Invalid login credentials');
+  const handleLogin =async () => {
+    
+    if (!userName || !password) {
+      Alert.alert('Error', 'Please enter username and password');
+      return;
     }
+
+    setLoading(true);
+    try{
+
+      const response = await fetch('https://setmystage.ddns.net/api/v1/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': 'poiwuhjd-plsiej-bvhue-isvhnd', 
+        },
+        body: JSON.stringify({ email: userName,password: password }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      
+
+      if (response.ok) {
+        const { jwtToken, isVendor } = data;
+
+        // Save token in AsyncStorage
+        await AsyncStorage.setItem('jwtToken',jwtToken);
+
+        // Navigate based on role
+        if (isVendor == 0) {
+          router.push('./(customerTabs)/customerIndex');
+        } else {
+          router.push('./(tabs)');
+        } 
+      } else {
+        Alert.alert('Login Failed', data.message || 'Invalid credentials');
+      }
+
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+   
   };
 
   return (
@@ -29,8 +66,8 @@ export default function LoginScreen() {
         <View style={styles.loginContainer}>
             <Text style={styles.title}>Login</Text>
             <TextInput style={styles.input} placeholder="Username" onChangeText={onChangeText} />
-            <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-            <Button title="Login" onPress={handleLogin} />
+            <TextInput style={styles.input} placeholder="Password" secureTextEntry onChangeText={onChangePassword} />
+            <Button title={loading ? 'Logging in...' : 'Login'} onPress={handleLogin} disabled={loading} />
         </View>
         
         <View style={styles.footerContainer}>
