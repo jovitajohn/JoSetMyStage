@@ -1,4 +1,4 @@
-import { StyleSheet,View,Text, FlatList, SafeAreaView,TouchableOpacity,Alert,Image } from 'react-native';
+import { StyleSheet,View,Text, FlatList, SafeAreaView,TouchableOpacity,Alert,Image,Dimensions} from 'react-native';
 import { Stack,useNavigation } from 'expo-router';
 import { ThemedView } from '@/components/ThemedView';
 import { useEffect } from 'react';
@@ -8,6 +8,9 @@ import detaildata from './customerPropertyDetail';
 import type { StackNavigationProp } from '@react-navigation/stack';
 
 export default function ListingScreen() {
+
+  const { width } = Dimensions.get("window");
+  const CARD_WIDTH = width * 0.9; 
 
   type RootStackParamList = {
     listing: undefined; // Parameters for 'listing' screen
@@ -21,22 +24,79 @@ export default function ListingScreen() {
       // const navigation = useNavigation();
 
         useEffect(() => {
-          navigation.setOptions({ headerShown: true });
-        }, [navigation]);
+          navigation.setOptions({ 
+                     headerShown: true,
+                               headerStyle: {
+                               shadowColor: 'transparent',  // Remove shadow on iOS
+                               elevation: 0,  // Remove shadow on Android
+                               //opacity: .4,
+                               backgroundColor: 'white', // Optional: Keep header background transparent
+                               height: 100,
+                             }, 
+                             headerTitleStyle: {
+                               fontSize: 18,
+                               fontWeight: 'bold',
+                               lineHeight: 100, // Matches header height
+                               flex: 1, 
+                             },
+                             headerLeft: () => null,
+                             headerTitle: () => (
+                               <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
+                                 <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>My Bookings</Text>
+                                 <Icon
+                                  //name="settings-outline" // Icon name from Ionicons
+                                  size={24}
+                                  color="#00adf5"
+                                  style={{ marginRight: 15 }}
+                                  //onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                                />
+                               </View>
+                             ),
+                           
+                             headerTintColor: '#000000',});
+                  },  [navigation]);
 
-        const listing = [ {name: ' Sheraton',id: 1}, 
-          {name: ' Holiday Inn',id: 2},
-          {name: ' IBS',id: 3},
-          {name: ' Apex',id: 4},]
+                  const listing = [ {name: ' Sheraton',id: 1,status:'Waiting',add:'1 Festival Sq, Edinburgh EH3 9SR ',price:'100/h',img:'https://uniquevenuesofedinburgh.co.uk/wp-content/uploads/2014/05/uve__0000s_0002_dovecot-9-340x340.jpg'}, 
+                    {name: ' Holiday Inn',id: 2,status:'Approved',add:'Picardy Pl, Edinburgh EH1 3JT',price:'50/h',img: 'https://www.tagvenue.com/images/location-pages/small/162.jpg'},
+                    {name: ' IBS',id: 3,status:'Rejected',add:'77 South Bridge, Edinburgh EH1 1HN ',price:'20/h',img:'https://cdn0.hitched.co.uk/vendor/5919/3_2/640/jpg/dsc07353_4_325919-168450847059960.jpeg'},
+                    {name: ' Apex',id: 4,status:'Approved',add:'23-27 Waterloo Pl, Edinburgh EH1 3BG ',price:'150/h',img: 'https://cdn0.hitched.co.uk/vendor/0903/3_2/960/jpeg/erin-and-ryan-ceremony_4_190903-166072559082285.jpeg'},]
+          
 
           // Reusable card component
-  const CardItem = ({ title, description, image, onPress }: any) => (
+  const CardItem = ({ title, description, status, image, onPress }: any) => (
     <TouchableOpacity onPress={onPress} style={styles.card}>
-      <Image source={{ uri: image }} style={styles.cardImage} />
       <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{title}</Text>
-        <Text style={styles.cardDescription}>{description}</Text>
+      <Image source={{ uri: image }} style={styles.cardImage} />
+        <View
+          style={{
+            // width: 0,
+            // height: 0,
+            // borderBottomWidth: 40, // Adjust for triangle size
+            // borderRightWidth: 100, // Adjust for triangle size
+            // borderBottomColor: "transparent",
+            // borderRightColor: "blue", // Triangle color
+            // borderStyle: "solid",
+            // position:'absolute',
+            marginTop:'10%',
+            paddingTop: 5,
+            paddingBottom:5,
+            alignSelf:'flex-end',
+            paddingLeft:20,
+            width:'40%',
+            position:'absolute',
+            borderRadius: 5,
+            backgroundColor: '#00adf5',
+          }}
+        >
+           <Text style={styles.statusText}>{status}</Text>
+          </View>
+
+        
       </View>
+      <View style={styles.textContent}>
+          <Text style={styles.cardTitle}>{title}</Text>
+          <Text style={styles.cardDescription}>{description}</Text>
+        </View>
     </TouchableOpacity>
   );
 
@@ -49,7 +109,7 @@ export default function ListingScreen() {
       <View
         style = {styles.container}>
 
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{
             title: 'customer listing',
             headerRight: () => (
@@ -64,7 +124,7 @@ export default function ListingScreen() {
 
             ),
           }}
-        />
+        /> */}
 
         {/* href sublink method 
         
@@ -79,8 +139,9 @@ export default function ListingScreen() {
                             renderItem={({ item }) =>
                                <CardItem 
                                   title={item.name}
-                                  description={'item.description'}
-                                  image={'https://archive.org/download/placeholder-image/placeholder-image.jpg'}
+                                  description={item.add}
+                                  image={item.img}
+                                  status={item.status}
                                   onPress={() => Alert.alert('Card Pressed', `You pressed ${item.name}`)}
                                />
                               }  //<Text style={styles.card}>{item.name}</Text>
@@ -97,7 +158,6 @@ const styles = StyleSheet.create({
 
   container:{
     flex: 1,
-    padding:1,
   },
   titleContainer: {
     flex:1,
@@ -156,7 +216,13 @@ cardImage: {
   alignSelf:'center'
 },
 cardContent: {
-  flex: 1,
+},
+textContent: {
+  // position: "absolute",
+  //   top: 0, // Adjust based on triangle size
+  //   left: 10, // Adjust to center text inside triangle
+  //   zIndex: 1, // Ensures text is on top of the triangle
+  flex:1,
 },
 cardTitle: {
   fontSize: 16,
@@ -168,5 +234,9 @@ cardDescription: {
   fontSize: 14,
   color: '#666',
   marginTop: 5,
+},
+statusText: {
+  fontSize: 16,
+  color: 'white',
 },
 });

@@ -43,7 +43,7 @@ export default function customerHome() {
                    headerLeft: () => null,
                    headerTitle: () => (
                      <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
-                       <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Set My Stage(customer home)</Text>
+                       <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Set My Stage</Text>
                        <Icon
                         name="settings-outline" // Icon name from Ionicons
                         size={24}
@@ -119,7 +119,7 @@ export default function customerHome() {
         </ThemedView> */}
              
         <ThemedView style={styles.titleContainer}>
-                      floating search bar
+                      {/* floating search bar */}
                       <View style={styles.floatingTextContainer}>
                         <Text style={styles.floatingText}>Your Floating Text</Text>
                         <TouchableOpacity onPress={() => Alert.alert('Card Pressed', `You clicked settings`)}
@@ -131,7 +131,7 @@ export default function customerHome() {
                             onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
                           />
                         </TouchableOpacity>
-                        {/* <Text style={styles.floatingIcon}>Yt</Text> */}
+                       
                       </View>
                       <SafeAreaView style={styles.listContainer}>
                         <FlatList
