@@ -21,48 +21,49 @@ export default function VendorProfile() {
   const [text, onChangeText] = React.useState('');
   const [number, onChangeNumber] = React.useState('');
   const [userId, setUserId] = React.useState('1234');
+  const [isToggled, setIsToggled] = useState(true); // Toggle state
+  
 
   const router = useRouter();
       const navigation = useNavigation();
     
       useEffect(() => {
-        navigation.setOptions({ 
-          headerShown: true,
-          headerStyle: {
-          shadowColor: 'transparent',  // Remove shadow on iOS
-          elevation: 0,  // Remove shadow on Android
-          //opacity: .4,
-          backgroundColor: 'rgba(255, 255, 255, 0.3)', // Optional: Keep header background transparent
-          height: 100,
-        }, 
-        headerTitleAlign: 'start',
-        headerTitleStyle: {
-          fontSize: 18,
-          fontWeight: 'bold',
-          lineHeight: 100, // Matches header height
-          flex: 1, 
-        },
-        headerTitle: () => (
-          <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Profile</Text>
-            <Icon
-              name="save-outline"
-              size={24}
-              color="#00adf5"
-              style={{ marginRight: 15 }}
-              onPress={() => alert('Profile changes saved')}
-            />
-          </View>
-        ),
-      
-        headerTintColor: '#000000',});
-      }, [navigation]);
-
-      const [isToggled, setIsToggled] = useState(false); // Toggle state
+         navigation.setOptions({ 
+                 headerShown: true,
+                 headerStyle: {
+                 shadowColor: 'transparent',  // Remove shadow on iOS
+                 elevation: 0,  // Remove shadow on Android
+                 //opacity: .4,
+                 backgroundColor: 'white', // Optional: Keep header background transparent
+                 height: 100,
+               }, 
+               headerTitleAlign: 'start',
+               headerTitleStyle: {
+                 fontSize: 18,
+                 fontWeight: 'bold',
+                 lineHeight: 100, // Matches header height
+                 flex: 1, 
+               },
+               headerTitle: () => (
+                 <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
+                   <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Profile</Text>
+                   <Icon
+                     name="save-outline"
+                     size={24}
+                     color="#00adf5"
+                     style={{ marginRight: 15 }}
+                     onPress={handleSave}
+                   />
+                 </View>
+               ),
+             
+               headerTintColor: '#000000',});
+             },  [navigation]);
 
   const handleToggle = () => {
     setIsToggled((prevState) => !prevState); // Toggle the state
-    router.replace('../(customerTabs)/customerIndex')
+   // router.replace('../(customerTabs)/customerIndex')
+   console.log("after toggle ",isToggled);
   };
 
   //bottom sheet
@@ -77,11 +78,28 @@ const openBottomSheet = () => {
   bottomSheetRef.current?.expand(); // Open bottom sheet
 };
 
+const switchRoleandNavigate = () => {
+  console.log("is toggled",isToggled);
+  if(!isToggled ){
+    
+      console.log("check before swutch ",isToggled);
+    
+      router.replace('../(customerTabs)/customerIndex')
+  
+    
+  }
+
+}
+
 //Save profile
 const handleSave = () => {
   // Add your authentication logic here.
-  alert('Profile changes saved')
-};
+ Alert.alert(
+    "Set My Stage", // Title
+    "Profile changes saved.", // Message
+    [{ text: "OK", onPress: switchRoleandNavigate}] // Button
+  );
+}
 
     
   return (
@@ -157,12 +175,21 @@ const handleSave = () => {
                             placeholder="Mobile"
                           />
 
+                          <View style={styles.verifyContainer}>
+
                           <TextInput
                             style={styles.input}
                             multiline={true}
                             onChangeText={onChangeText}
                             placeholder="Email"
                           />
+
+                            <Text style={[styles.verifyText, { backgroundColor: isToggled ? '#4CAF50' : '#f44336' }]}>
+                              {isToggled ? 'Verified' : 'Verify'} {/* Show ON/OFF based on state */}
+                            </Text>
+                          </View>
+
+                          
                           <TextInput
                             style={styles.input}
                             multiline={true}
@@ -202,6 +229,10 @@ const handleSave = () => {
                             <Text style={styles.buttonText}>Save</Text>
                           </TouchableOpacity>
 
+                          <TouchableOpacity onPress={handleSave} style={styles.buttonDelete}>
+                            <Text style={styles.buttonText}>Delete Account</Text>
+                          </TouchableOpacity>
+
                     </View>
 
                 </View>
@@ -223,7 +254,6 @@ const handleSave = () => {
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    marginTop: -30,
   },
   headerImage: {
     color: '#808080',
@@ -284,6 +314,7 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    flex:1,
   },
   aboutInput: {
     minWidth: '90%',
@@ -432,11 +463,33 @@ toggleContainer:{
 flexDirection:'row',
 justifyContent:'flex-end',
 alignItems:'baseline',
-marginTop:10,
 },
 toggleLabel: {
   fontSize: 10,
   color: '#00adf5',
   textDecorationLine: 'underline',
+},
+buttonDelete: {
+  padding: 10,
+  backgroundColor: '#E74A4C',
+  borderRadius: 5,
+  justifyContent:'center',
+  alignItems: 'center',
+  margin: 12,
+},
+verifyText:{
+  padding: 5,
+  alignSelf:'center',
+  position:'absolute',
+  color:'white',
+  borderRadius: 5,
+  right: 20,
+},
+verifyContainer:{
+  width:'100%',
+  display:'flex',
+flexDirection:'row',
+justifyContent:'flex-end',
+alignItems:'baseline',
 },
 });
