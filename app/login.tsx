@@ -12,16 +12,16 @@ export default function LoginScreen() {
   const [password,onChangePassword] = useState('');
   const [loading,setLoading] = useState(false);
 
-  // const handleLogin =async () => {
-  //   if(userName.trim().startsWith('C')){
-  //  router.push('./(customerTabs)/customerIndex'); // Navigate to the customertabs screen.
-  //  }else if(userName.trim().startsWith('V')){
-  //    router.push('./(tabs)'); // Navigate to the tabs screen.
-  //  }else{
-  //    alert('Invalid login credentials');
-  //  }
-  // }
-  const handleLogin =async () => {
+  const handleLoginTest =async () => {
+    if(userName.trim().startsWith('C')){
+   router.push('./(customerTabs)/customerIndex'); // Navigate to the customertabs screen.
+   }else if(userName.trim().startsWith('V')){
+     router.push('./(tabs)'); // Navigate to the tabs screen.
+   }else{
+     alert('Invalid login credentials');
+   }
+  }
+  const handleLoginApi =async () => {
     
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -80,7 +80,7 @@ export default function LoginScreen() {
             <Text style={styles.title}>Login</Text>
             <TextInput style={styles.input} placeholder="Username" onChangeText={onChangeText} />
             <TextInput style={styles.input} placeholder="Password" secureTextEntry onChangeText={onChangePassword} />
-            <Button title={loading ? 'Logging in...' : 'Login'} onPress={handleLogin} disabled={loading} />
+            <Button title={loading ? 'Logging in...' : 'Login'} onPress={handleLoginApi} disabled={loading} />
         </View>
         
         <View style={styles.footerContainer}>

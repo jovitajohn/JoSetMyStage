@@ -40,10 +40,6 @@ export default function RootLayout() {
   }, [isMounted,isAuthenticated]);
 
 
-  if (!loaded) {
-    return null;
-  }
-
   //Exit confirmation
   useEffect(() => {
     const handleBackPress = () => {
@@ -58,15 +54,22 @@ export default function RootLayout() {
       );
       return true; // Prevent default back action
     };
-  
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-  
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-    };
+  // Add event listener
+  const backHandler = BackHandler.addEventListener(
+    'hardwareBackPress',
+    handleBackPress
+  );
+
+  return () => {
+    // Cleanup event listener on unmount
+    backHandler.remove();
+  };
   }, []);
 
 
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

@@ -14,7 +14,8 @@ import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView, Platform } from 'react-native';
-// import QRCode from 'react-native-qrcode-svg';
+import QRCode from 'react-native-qrcode-svg';
+import { TextInputMask } from 'react-native-masked-text';
 
 export default function VendorProfile() {
 
@@ -22,6 +23,7 @@ export default function VendorProfile() {
   const [number, onChangeNumber] = React.useState('');
   const [userId, setUserId] = React.useState('1234');
   const [isToggled, setIsToggled] = useState(true); // Toggle state
+  const [dob, setDob] = useState('');
   
 
   const router = useRouter();
@@ -48,11 +50,11 @@ export default function VendorProfile() {
                  <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
                    <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Profile</Text>
                    <Icon
-                     name="save-outline"
+                     name="log-out-outline"
                      size={24}
                      color="#00adf5"
                      style={{ marginRight: 15 }}
-                     onPress={handleSave}
+                     onPress={handleLogout}
                    />
                  </View>
                ),
@@ -90,6 +92,19 @@ const switchRoleandNavigate = () => {
   }
 
 }
+//Save profile
+const handleLogout = () => {
+  // Add your authentication logic here.
+ Alert.alert(
+         'Set my Stage',
+         'Do you want to logout?',
+         [
+           { text: 'Cancel', style: 'cancel' },
+           { text: 'Logout', onPress: () => router.replace('../login') },
+         ],
+         { cancelable: true }
+       );
+}
 
 //Save profile
 const handleSave = () => {
@@ -101,6 +116,23 @@ const handleSave = () => {
   );
 }
 
+const handleChangeText = (text:string) => {
+  setDob(text);
+};
+
+ //delete profile
+ const handleDeleteAccount = () => {
+  // Add your authentication logic here.
+  Alert.alert(
+    'Set my Stage',
+    'Are you sure to delete account?',
+    [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', onPress: () => router.replace('../login') },
+    ],
+    { cancelable: true }
+  );
+}
     
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -108,8 +140,9 @@ const handleSave = () => {
         style = {styles.container}>
            <SafeAreaProvider>
            <SafeAreaView style = {styles.container}>
+           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
               <ThemedView style={styles.container}>
-                <View >
+                
                
                         {/* //https://toppng.com/uploads/preview/roger-berry-avatar-placeholder-11562991561rbrfzlng6h.png */}
                         
@@ -141,19 +174,102 @@ const handleSave = () => {
                                 placeholder=" About me - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
                               />
                               
-                              {/* <QRCode 
+                              <QRCode 
                                 value={userId} // User ID as the QR code content
                                 size={150} 
                                 color="black"
                                 backgroundColor="white"
-                              /> */}
+                              />
                               
+
+                              <TextInput
+                                style={styles.input}
+                                multiline={false}
+                                onChangeText={onChangeText}
+                                keyboardType="numeric"
+                                maxLength={11}
+                                placeholder="Mobile"
+                              />
+
+                              <View style={styles.verifyContainer}>
+
+                                <TextInput
+                                  style={styles.emailInput}
+                                  multiline={false}
+                                  scrollEnabled={true}
+                                  numberOfLines={1} 
+                                  onChangeText={onChangeText}
+                                  placeholder="Email"
+                                />
+
+                                  <Text style={[styles.verifyText, { backgroundColor: isToggled ? '#4CAF50' : '#f44336' }]}>
+                                    {isToggled ? 'Verified' : 'Verify'}
+                                  </Text>
+                              </View>
+
+                              <TextInputMask
+                                type={'datetime'}
+                                options={{ format: 'DD/MM/YYYY' }}
+                                maxLength={10}
+                                style={styles.input}
+                                placeholder="Date of birth (dd/mm/yyyy)"
+                                keyboardType="numeric"
+                                onChangeText={handleChangeText}
+                              />
+
+                              <TextInput
+                                style={styles.input}
+                                multiline={false}
+                                maxLength={50} 
+                                scrollEnabled={true}
+                                  numberOfLines={1} 
+                                onChangeText={onChangeText}
+                                placeholder="Address line1"
+                              />
+
+                              <TextInput
+                                style={styles.input}
+                                multiline={false}
+                                maxLength={50}
+                                scrollEnabled={true}
+                                  numberOfLines={1} 
+                                onChangeText={onChangeText}
+                                placeholder="Address line 2"
+                              />
+
+                              <TextInput
+                                style={styles.input}
+                                multiline={false}
+                                maxLength={50} 
+                                scrollEnabled={true}
+                                  numberOfLines={1} 
+                                onChangeText={onChangeText}
+                                placeholder="City"
+                              />
+
+                              <TextInput
+                                style={styles.input}
+                                multiline={false}
+                                maxLength={50} 
+                                scrollEnabled={true}
+                                  numberOfLines={1} 
+                                onChangeText={onChangeText}
+                                placeholder="Country"
+                              />
+
+                              <TouchableOpacity onPress={handleSave} style={styles.button}>
+                                <Text style={styles.buttonText}>Save</Text>
+                              </TouchableOpacity>
+
+                              <TouchableOpacity onPress={handleDeleteAccount} >
+                                <Text style={styles.buttonTextDelete}>Delete Account</Text>
+                              </TouchableOpacity>
 
                           </View>
                           
-                </View>
+               
                 
-      <BottomSheet style={styles.card}
+      {/* <BottomSheet style={styles.card}
         snapPoints={["10%","20%","35%","40%", "50%","60%","70%","80%","90%"]} // Add snap points
         ref={bottomSheetRef}
         onChange={handleSheetChanges}
@@ -163,7 +279,7 @@ const handleSave = () => {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             
           >
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            
 
                 <View >
           
@@ -185,7 +301,7 @@ const handleSave = () => {
                           />
 
                             <Text style={[styles.verifyText, { backgroundColor: isToggled ? '#4CAF50' : '#f44336' }]}>
-                              {isToggled ? 'Verified' : 'Verify'} {/* Show ON/OFF based on state */}
+                              {isToggled ? 'Verified' : 'Verify'}
                             </Text>
                           </View>
 
@@ -236,12 +352,13 @@ const handleSave = () => {
                     </View>
 
                 </View>
-              </ScrollView>
+             
             </KeyboardAvoidingView>   
                 </BottomSheetView>
-      </BottomSheet>
+      </BottomSheet> */}
     
               </ThemedView>
+              </ScrollView>
             </SafeAreaView>
             </SafeAreaProvider>
 
@@ -254,6 +371,7 @@ const handleSave = () => {
 const styles = StyleSheet.create({
   container:{
     flex: 1,
+    backgroundColor:'white',
   },
   headerImage: {
     color: '#808080',
@@ -313,6 +431,7 @@ const styles = StyleSheet.create({
     minWidth: '90%',
     margin: 12,
     borderWidth: 1,
+    borderRadius:5,
     padding: 10,
     flex:1,
   },
@@ -396,6 +515,7 @@ buttonContainer: {
   marginTop:20,
 },
 button: {
+  width:'90%',
   padding: 10,
   backgroundColor: '#1BE7FF',
   borderRadius: 5,
@@ -483,18 +603,27 @@ buttonDelete: {
   margin: 12,
 },
 verifyText:{
+  fontSize:10,
   padding: 5,
   alignSelf:'center',
-  position:'absolute',
   color:'white',
   borderRadius: 5,
-  right: 20,
+  right: 5,
+},
+emailInput: {
+  minWidth: '75%',
+  padding:10,
+  paddingStart:15,
+  flex:1,
 },
 verifyContainer:{
-  width:'100%',
+  minWidth: '90%',
   display:'flex',
+  borderWidth: 1,
+  margin: 12,
+  flex:1,
+  borderRadius:5,
 flexDirection:'row',
-justifyContent:'flex-end',
-alignItems:'baseline',
+justifyContent:'space-between',
 },
 });
