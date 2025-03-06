@@ -110,7 +110,7 @@ export default function ListingScreen() {
                                   title={item.name}
                                   description={item.add}
                                   image={item.img}
-                                  onPress={() => Alert.alert('Card Pressed', `You pressed ${item.name}`)}
+                                  onPress={() => navigation.navigate('propertyDetail')}
                                />
                               }  //<Text style={styles.card}>{item.name}</Text>
                           />
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
 cardImage: {
   width: 360,
   height: 200,
-  borderRadius: 30,
+  borderRadius: 15,
   alignSelf:'center'
 },
 cardContent: {

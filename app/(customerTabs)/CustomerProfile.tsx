@@ -14,7 +14,9 @@ import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView, Platform } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+// import QRCode from 'react-native-qrcode-svg';
+import 'react-native-reanimated';
+import 'react-native-gesture-handler';
 
 export default function CustomerProfile() {
 
@@ -103,7 +105,7 @@ const handleSave = () => {
   
 };
 
-    
+    try{
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}
@@ -143,12 +145,12 @@ const handleSave = () => {
                                 placeholder=" About me - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
                               />
                               
-                              <QRCode 
+                              {/* <QRCode 
                                 value={userId} // User ID as the QR code content
                                 size={150} 
                                 color="black"
                                 backgroundColor="white"
-                              />
+                              /> */}
                               
 
                           </View>
@@ -229,8 +231,8 @@ const handleSave = () => {
                             <Text style={styles.buttonText}>Save</Text>
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={handleSave} style={styles.buttonDelete}>
-                            <Text style={styles.buttonText}>Delete Account</Text>
+                          <TouchableOpacity onPress={handleSave} >
+                            <Text style={styles.buttonTextDelete}>Delete Account</Text>
                           </TouchableOpacity>
 
                     </View>
@@ -249,6 +251,10 @@ const handleSave = () => {
       </ScrollView>
       </GestureHandlerRootView>
     );
+  }catch(error){
+     console.error('Error rendering screen:', error);
+  return <Text>Something went wrong!</Text>;
+  }
 }
 
 const styles = StyleSheet.create({
@@ -417,6 +423,11 @@ buttonSecondary: {
 },
 buttonText: {
   color: '#fff',
+  fontSize: 14,
+  fontWeight: 'bold',
+},
+buttonTextDelete: {
+  color: 'red',
   fontSize: 14,
   fontWeight: 'bold',
 },

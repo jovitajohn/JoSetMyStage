@@ -147,14 +147,14 @@ export default function bookingDetail() {
                    title: 'Booking Detail',
                  }}
                />
-               
+               <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                <ThemedView style={styles.container}>
  
                   {/* 'https://archive.org/download/placeholder-image/placeholder-image.jpg' */}
                   <Image source={{ uri: 'https://www.tagvenue.com/images/location-pages/small/162.jpg' }} style={styles.titleImage} /> 
  
                  <View style={styles.cardDetail}>
-                  <ScrollView >
+                  
                   
                      {/* Customer details card */}
                      <View style={styles.card}>
@@ -186,7 +186,7 @@ export default function bookingDetail() {
 
                     <View style={styles.simpleView}>
                     <Text style={styles.cardDescription}>Note :</Text>
-                       <Text style={styles.cardDescription}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
+                       <Text style={styles.cardDescription}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
  
 
 
@@ -207,9 +207,10 @@ export default function bookingDetail() {
                       <Text style={styles.buttonText}>Book Now</Text>
                     </TouchableOpacity>
                     
-                   </ScrollView>
+                   
                  </View>
                </ThemedView>
+               </ScrollView>
              </SafeAreaView>
              </SafeAreaProvider>
  
@@ -248,7 +249,7 @@ export default function bookingDetail() {
    },
    cardDetail: {
      borderRadius:30,
-     marginTop:-50,
+     marginTop:-30,
      padding:10,
      backgroundColor:'white',
    },

@@ -45,11 +45,11 @@ export default function customerHome() {
                      <View style={{ flexDirection: 'row',  justifyContent: 'space-between', width: '100%' }}>
                        <Text style={{ fontSize: 18, fontWeight: 'bold',  flex: 1 }}>Set My Stage</Text>
                        <Icon
-                        name="settings-outline" // Icon name from Ionicons
+                       // name="settings-outline" // Icon name from Ionicons
                         size={24}
                         color="#00adf5"
                         style={{ marginRight: 15 }}
-                        onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                        //onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
                       />
                      </View>
                    ),
@@ -121,14 +121,14 @@ export default function customerHome() {
         <ThemedView style={styles.titleContainer}>
                       {/* floating search bar */}
                       <View style={styles.floatingTextContainer}>
-                        <Text style={styles.floatingText}>Your Floating Text</Text>
+                        <Text style={styles.floatingText}>Search...</Text>
                         <TouchableOpacity onPress={() => Alert.alert('Card Pressed', `You clicked settings`)}
                          style={styles.floatingIcon}>
                           <Icon
                             name="settings-outline" // Icon name from Ionicons
                             size={24}
                             color="#00adf5"
-                            onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                            onPress={() => Alert.alert('Card Pressed', `Feature Search coming soon`)}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
                           />
                         </TouchableOpacity>
                        
@@ -142,7 +142,7 @@ export default function customerHome() {
                                  address={item.add}
                                  price={item.price}
                                  image={item.img}//{'https://archive.org/download/placeholder-image/placeholder-image.jpg'} //
-                                 onPress={() => Alert.alert('Card Pressed', `You pressed ${item.name}`)}
+                                 onPress={() => navigation.navigate('booking') } //Alert.alert('Card Pressed', `You pressed ${item.name}`)}
                               />
                              }  //<Text style={styles.card}>{item.name}</Text>
                           />

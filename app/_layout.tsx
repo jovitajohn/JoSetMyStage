@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect,useState } from 'react';
 import 'react-native-reanimated';
-
+import { Alert, BackHandler } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -43,6 +43,28 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
+  //Exit confirmation
+  useEffect(() => {
+    const handleBackPress = () => {
+      Alert.alert(
+        'Exit App',
+        'Do you want to exit?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Exit', onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: true }
+      );
+      return true; // Prevent default back action
+    };
+  
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+  
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    };
+  }, []);
 
 
 

@@ -52,7 +52,7 @@ export default function VendorHome() {
                             size={24}
                             color="#00adf5"
                             style={{ marginRight: 15 }}
-                            onPress={() => navigation.navigate('booking')}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
+                            onPress={() => Alert.alert('Button Pressed', `Block calender coming soon`)}   // Navigate to the new screen //alert('Coming soon - Add new listing!')}
                           />
                          </View>
                        ),

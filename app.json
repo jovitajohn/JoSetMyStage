@@ -1,19 +1,23 @@
 {
   "expo": {
-    "name": "sample-eventhost",
+    "name": "Set my Stage",
     "slug": "sample-eventhost",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo-small.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jovitajohn.sampleeventhost",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/logo-small.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.jovitajohn.sampleeventhost"
@@ -28,7 +32,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/logo-small.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
@@ -39,6 +43,7 @@
       "typedRoutes": true
     },
     "extra": {
+      "enableLogging": true,
       "router": {
         "origin": false
       },
