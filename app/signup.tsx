@@ -1,11 +1,12 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert,ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert,ScrollView,ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter,useNavigation  } from 'expo-router';
 import { TextInputMask } from 'react-native-masked-text';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { ThemedView } from '@/components/ThemedView';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -24,7 +25,10 @@ export default function Signup() {
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
+  const [description, setDescription] = useState('');
+  const [post, setPost] = useState('');
   const [profilePic, setProfilePic] = useState('');
+  const [loading,setLoading] = useState(false);
   
 
         const navigation = useNavigation();
@@ -63,12 +67,12 @@ export default function Signup() {
                },  [navigation]);
 
 
-  const handleSignup = () => {
+  const handleSignup =async () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Basic validation example
-    if (!name || !email || !confirmEmail || !password || !dob || !address1 || !address2 || !city || !country || !mobileNumber) {
+    if (!name || !email || !confirmEmail || !password || !dob || !address1 || !address2 || !city || !country || !post || !mobileNumber) {
       Alert.alert('Error', 'All fields are required!');
       return;
     }
@@ -77,12 +81,54 @@ export default function Signup() {
       return;
     }
 
-    Alert.alert('Success', 'Account created successfully!', [
-        {
-          text: 'OK',
-          onPress: () => router.replace('/login'), // Navigate to login page on OK press
+    // Alert.alert('Success', 'Account created successfully!', [
+    //     {
+    //       text: 'OK',
+    //       onPress: () => router.replace('/login'), // Navigate to login page on OK press
+    //     },
+    //   ]);
+
+    setLoading(true);
+    try{
+      console.log(dob);
+      const response = await fetch('https://setmystage.ddns.net/api/v1/customers/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': 'poiwuhjd-plsiej-bvhue-isvhnd', 
         },
-      ]);
+        body: JSON.stringify({ name: name,description:description,DOB:dob,addressLine1:address1,addressLine2:address2,city:city,postcode:post,country:country,email:email,mobile:mobileNumber,password: password ,isVendor:false,lat: "11.9",long: "2.4"}),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      
+
+      if (response.ok) {
+         Alert.alert(
+            'Set my Stage',
+            'Account created successfully!',
+            [
+              { text: 'OK', onPress: () => router.replace('../login') },
+            ],
+            { cancelable: false }
+          );
+      } else {
+        const errorMessage = data.details?.message || 'Something went wrong!';
+      throw new Error(errorMessage);
+        //Alert.alert('Sign up Failed', data.message || 'Something went wrong!!');
+      }
+
+    } catch (error: unknown) {
+      console.log(error);
+     if (error instanceof Error) {
+     Alert.alert('Error', error.message, [{ text: 'OK' }]);
+     }else{
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+     }
+    } finally {
+      setLoading(false);
+    }
 
   };
 
@@ -102,9 +148,16 @@ export default function Signup() {
   return (
        <SafeAreaProvider>
        <SafeAreaView style={{flex:1,backgroundColor:'white',marginTop:25}}>
+       {loading && (
+        <View style={[StyleSheet.absoluteFill, styles.loadingOverlay]}>
+          <ActivityIndicator size="large" color="#00adf5" />
+        </View>
+      )}
        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <ThemedView style={styles.container}>
     <View style={styles.container}>
+
+   
 
       {/* Profile Picture */}
       <TouchableOpacity onPress={handleProfilePicUpload}>
@@ -118,7 +171,7 @@ export default function Signup() {
       {/* Input Fields */}
       <TextInput
         style={styles.input}
-        placeholder="Name"
+        placeholder="* Name"
         multiline={false}
         maxLength={50} 
         numberOfLines={1}
@@ -127,7 +180,7 @@ export default function Signup() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="* Email"
         value={email}
         multiline={false}
         scrollEnabled={true}
@@ -137,14 +190,14 @@ export default function Signup() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirm Email"
+        placeholder="* Confirm Email"
         value={confirmEmail}
         onChangeText={setConfirmEmail}
         keyboardType="email-address"
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="* Password"
         value={password}
         multiline={false}
         maxLength={50} 
@@ -154,8 +207,8 @@ export default function Signup() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirm Password"
-        value={password}
+        placeholder="* Confirm Password"
+        value={confPassword}
         multiline={false}
         maxLength={50} 
         numberOfLines={1}
@@ -164,10 +217,10 @@ export default function Signup() {
       />
       <TextInputMask
         type={'datetime'}
-        options={{ format: 'DD/MM/YYYY' }}
+        options={{ format: 'DD-MM-YYYY' }}
         maxLength={10}
         style={styles.input}
-        placeholder="Date of birth (dd/mm/yyyy)"
+        placeholder="* Date of birth (dd-mm-yyyy)"
         keyboardType="numeric"
         value={dob}
         onChangeText={setDob}
@@ -178,7 +231,7 @@ export default function Signup() {
         maxLength={50} 
         scrollEnabled={true}
         numberOfLines={1} 
-        placeholder="Address line1"
+        placeholder="* Address line1"
         value={address1}
         onChangeText={setAddress1}
       />
@@ -190,7 +243,7 @@ export default function Signup() {
         numberOfLines={1} 
         value={address2}
         onChangeText={setAddress2}
-        placeholder="Address line 2"
+        placeholder="* Address line 2"
       />
       <TextInput
         style={styles.input}
@@ -200,7 +253,7 @@ export default function Signup() {
         numberOfLines={1} 
         value={city}
         onChangeText={setCity}
-        placeholder="City"
+        placeholder="* City"
       />
       <TextInput
         style={styles.input}
@@ -210,16 +263,34 @@ export default function Signup() {
         numberOfLines={1} 
         value={country}
         onChangeText={setCountry}
-        placeholder="Country"
+        placeholder="* Country"
       />
       <TextInput
         style={styles.input}
-        placeholder="Mobile Number"
+        multiline={false}
+        maxLength={50} 
+        scrollEnabled={true}
+        numberOfLines={1} 
+        value={post}
+        onChangeText={setPost}
+        placeholder="* Postcode"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="* Mobile Number"
         value={mobileNumber}
         onChangeText={setMobileNumber}
         keyboardType="numeric"
         maxLength={11}
         multiline={false}
+      />
+      <TextInput
+        style={[styles.input,{height:150,textAlignVertical:'top'}]}
+        multiline={true}
+        maxLength={300} 
+        value={description}
+        onChangeText={setDescription}
+        placeholder="Description (Max 300 characters)"
       />
 
       {/* Signup Button */}
@@ -281,5 +352,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999, // Ensure it appears above everything
   },
 });
