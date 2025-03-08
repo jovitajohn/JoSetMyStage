@@ -185,6 +185,7 @@ export default function Signup() {
         multiline={false}
         scrollEnabled={true}
         numberOfLines={1} 
+        maxLength={50} 
         onChangeText={setEmail}
         keyboardType="email-address"
       />
@@ -192,6 +193,7 @@ export default function Signup() {
         style={styles.input}
         placeholder="* Confirm Email"
         value={confirmEmail}
+        maxLength={50} 
         onChangeText={setConfirmEmail}
         keyboardType="email-address"
       />

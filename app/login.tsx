@@ -1,4 +1,4 @@
-import { View, Text, TextInput,Alert, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput,Alert, Button, TouchableOpacity,StyleSheet,ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Link } from 'expo-router';
 import React,{useState} from 'react';
@@ -26,7 +26,7 @@ export default function LoginScreen() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!userName || !password) {
-      Alert.alert('Error', 'Please enter username and password');
+      Alert.alert('Error', 'Please enter email and password');
       return;
     }else if(!emailRegex.test(userName) || password.length < 3){
       Alert.alert('Error', 'Please enter valid details');
@@ -76,11 +76,40 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      {loading && (
+              <View style={[StyleSheet.absoluteFill, styles.loadingOverlay]}>
+                <ActivityIndicator size="large" color="#00adf5" />
+              </View>
+            )}
         <View style={styles.loginContainer}>
             <Text style={styles.title}>Login</Text>
-            <TextInput style={styles.input} placeholder="Username" onChangeText={onChangeText} />
-            <TextInput style={styles.input} placeholder="Password" secureTextEntry onChangeText={onChangePassword} />
-            <Button title={loading ? 'Logging in...' : 'Login'} onPress={handleLoginApi} disabled={loading} />
+            <TextInput 
+              style={styles.input} 
+              placeholder="Email" 
+              multiline={false}
+              scrollEnabled={true}
+              numberOfLines={1} 
+              maxLength={50} 
+              keyboardType="email-address"
+              onChangeText={onChangeText} 
+            />
+            <TextInput 
+              style={styles.input} 
+              placeholder="Password" 
+              secureTextEntry 
+              multiline={false}
+              maxLength={50} 
+              numberOfLines={1}
+              onChangeText={onChangePassword} 
+            />
+            {/* <Button 
+              title={loading ? 'Logging in...' : 'Login'} 
+              onPress={handleLoginApi} 
+              disabled={loading} 
+            /> */}
+            <TouchableOpacity style={styles.button} onPress={handleLoginApi}>
+                    <Text style={styles.buttonText}>Login</Text>
+                  </TouchableOpacity>
         </View>
         
         <View style={styles.footerContainer}>
@@ -146,5 +175,29 @@ const styles = StyleSheet.create({
   },
   signupContainer:{
     flexDirection :'row',
+  },
+  button: {
+    backgroundColor: '#1BE7FF',
+    padding: 10,
+    width:'80%',
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999, // Ensure it appears above everything
   },
 });
