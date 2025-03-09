@@ -174,13 +174,19 @@ const handleChangeText = (text:string) => {
                                 placeholder=" About me - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
                               />
                               
-                              <QRCode 
-                                value={userId} // User ID as the QR code content
-                                size={150} 
-                                color="black"
-                                backgroundColor="white"
-                              />
                               
+                              <View style={{ alignItems: 'center', marginVertical: 20 }}>
+                                {userId ? (
+                                  <QRCode 
+                                    value={userId} // User ID as the QR code content
+                                    size={150} 
+                                    color="black"
+                                    backgroundColor="white"
+                                  />
+                                ) : (
+                                  <Text>No QR Code Available</Text> // Handle empty state
+                                )}
+                              </View>
 
                               <TextInput
                                 style={styles.input}

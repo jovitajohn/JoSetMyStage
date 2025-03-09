@@ -73,11 +73,23 @@ export default function Signup() {
 
     // Basic validation example
     if (!name || !email || !confirmEmail || !password || !dob || !address1 || !address2 || !city || !country || !post || !mobileNumber) {
-      Alert.alert('Error', 'All fields are required!');
+      Alert.alert('Error', 'All fields with * are required!');
       return;
     }
-    if (email !== confirmEmail || !emailRegex.test(email) || password.length < 3 || password !== confPassword) {
-      Alert.alert('Error', 'Please enter valid details!');
+    if (email !== confirmEmail ) {
+      Alert.alert('Error', 'Email and Confirm email does not match!');
+      return;
+    }
+    if (!emailRegex.test(email) ) {
+      Alert.alert('Error', 'Please enter valid email!');
+      return;
+    }
+    if (password.length < 3 ) {
+      Alert.alert('Error', 'Please enter valid password!');
+      return;
+    }
+    if (password !== confPassword) {
+      Alert.alert('Error', 'Password and Confirm password does not match!');
       return;
     }
 
