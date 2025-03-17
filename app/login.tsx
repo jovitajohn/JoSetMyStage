@@ -36,7 +36,7 @@ export default function LoginScreen() {
     setLoading(true);
     try{
 
-      const response = await fetch('https://setmystage.ddns.net/api/v1/login', {
+      const response = await fetch('https://setmystage.ddns.net/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

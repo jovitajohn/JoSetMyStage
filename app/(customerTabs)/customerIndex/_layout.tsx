@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import customerHome from "./customerHome";
 import bookingDetail from "./customerBookingDetail";
+import customerTimeSlot from "./customerTimeSlot";
 
 
 
@@ -15,6 +16,7 @@ export default function HomeLayout() {
         
         customerHome: undefined; // Parameters for 'home' screen
         booking: undefined;
+        timeSlot: undefined;
       };
 
       const Stack = createStackNavigator<RootStackParamList>();
@@ -28,6 +30,7 @@ const navigation = useNavigation<HomeNavigationProp>();
             <Stack.Navigator initialRouteName="customerHome">
                 <Stack.Screen name="customerHome" component={customerHome} />
                  <Stack.Screen name="booking" component={bookingDetail} />
+                 <Stack.Screen name="timeSlot" component={customerTimeSlot} />
              </Stack.Navigator>
         )
 }

@@ -15,6 +15,7 @@ export default function customerHome() {
  type RootStackParamList = {
     listing: undefined; // Parameters for 'listing' screen
     booking: undefined; // Parameters for 'detaildata' screen
+    timeSlot: undefined;
   };
 
       type ListingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'listing'>;

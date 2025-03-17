@@ -5,6 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useEffect, useState } from 'react';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import React from 'react';
+import type { StackNavigationProp } from '@react-navigation/stack';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Alert } from 'react-native';
@@ -15,7 +16,16 @@ export default function bookingDetail() {
    const [text, onChangeText] = React.useState('');
    const [number, onChangeNumber] = React.useState('');
  
-       const navigation = useNavigation();
+   type RootStackParamList = {
+       listing: undefined; // Parameters for 'listing' screen
+       booking: undefined; // Parameters for 'detaildata' screen
+       timeSlot: undefined;
+     };
+   
+         type ListingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'listing'>;
+       
+       const navigation = useNavigation<ListingScreenNavigationProp>();
+   
      
        useEffect(() => {
          navigation.setOptions({ headerShown: true,
@@ -203,7 +213,7 @@ export default function bookingDetail() {
                   </View>
  
                     
-                    <TouchableOpacity style={styles.button} onPress={() => Alert.alert('Button 1 Pressed', `You pressed Approve `)}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('timeSlot')}>
                       <Text style={styles.buttonText}>Book Now</Text>
                     </TouchableOpacity>
                     
